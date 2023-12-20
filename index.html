@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .area1, .container {
+            flex: 1;
+        }
+
+        .area1 {
+            background-image: url(ho.jpeg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            flex: 0 0 25%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #form {
+            width: 80%;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #form h1 {
+            color: #0f2027;
+            text-align: center;
+        }
+
+        #form button {
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #2d4059;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #form button:hover {
+            background-color: #1d2c4b;
+        }
+
+        .input-control {
+            margin-bottom: 15px;
+        }
+
+        .input-control label {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .input-control input {
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .input-control.success input {
+            border-color: #09c372;
+        }
+
+        .input-control.error input {
+            border-color: #ff3860;
+        }
+
+        .input-control .error {
+            color: #ff3860;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="area1"></div>
+    <div class="container">
+        <form id="form">         
+            <h1>Get Started</h1>
+            <div class="input-control">
+                <label for="username">Username</label>
+                <input id="username" name="username" type="text" required>
+                <div class="error"></div>
+            </div>
+            <div class="input-control">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="text" required>
+                <div class="error"></div>
+            </div>
+            <div class="input-control">
+                <label for="contact">Contact</label>
+                <input id="contact" name="user_phoe" type="text" required>
+                <div class="error"></div>
+            </div>
+            <div class="input-control">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" required>
+                <div class="error"></div>
+            </div>
+            <div class="input-control">
+                <label for="password2">Confirm password</label>
+                <input id="password2" name="password2" type="password" required>
+                <div class="error"></div>
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+    <script>
+        const form = document.getElementById('form');
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const phone = document.getElementById('contact');
+        const password = document.getElementById('password');
+        const password2 = document.getElementById('password2');
+
+        form.addEventListener('submit', e => {
+            if(!validateInputs()){
+                return false;
+            }
+        });
+
+        const setError = (element, message) => {
+            const inputControl = element.parentElement;
+            const errorDisplay = inputControl.querySelector('.error');
+
+            errorDisplay.innerText = message;
+            inputControl.classList.add('error');
+            inputControl.classList.remove('success')
+        }
+
+        const setSuccess = element => {
+            const inputControl = element.parentElement;
+            const errorDisplay = inputControl.querySelector('.error');
+
+            errorDisplay.innerText = '';
+            inputControl.classList.add('success');
+            inputControl.classList.remove('error');
+        };
+
+        const isValidEmail = email => {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        const validateInputs = () => {
+            const usernameValue = username.value.trim();
+            const emailValue = email.value.trim();
+            const phoneValue = phone.value.trim();
+            const passwordValue = password.value.trim();
+            const password2Value = password2.value.trim();
+
+            if(usernameValue === '') {
+                setError(username, 'Username is required');
+            } else {
+                setSuccess(username);
+            }
+
+            if(emailValue === '') {
+                setError(email, 'Email is required');
+            } else if (!isValidEmail(emailValue)) {
+                setError(email, 'Provide a valid email address');
+            } else {
+                setSuccess(email);
+            }
+            if(phoneValue === ''){
+                setError(phone, 'Phone number is required');
+            } else setSuccess(phone);
+
+            if(passwordValue === '') {
+                setError(password, 'Password is required');
+            } else if (passwordValue.length < 8 ) {
+                setError(password, 'Password must be at least 8 character.')
+            } else {
+                setSuccess(password);
+            }
+
+            if(password2Value === '') {
+                setError(password2, 'Please confirm your password');
+            } else if (password2Value !== passwordValue) {
+                setError(password2, "Passwords doesn't match");
+            } else {
+                setSuccess(password2);
+            }
+
+        };
+
+    </script>
+</body>
+</html>
